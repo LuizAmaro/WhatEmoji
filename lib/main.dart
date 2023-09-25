@@ -1,92 +1,153 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(WhatEmojiApp());
 
+
+void main() async{  WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(const WhatEmojiApp());
+}
 class WhatEmojiApp extends StatelessWidget {
+  const WhatEmojiApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'WhatEmoji',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: EmojiHomePage(),
+      title: 'WhatEmojiApp',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const EmojiListScreen(),
     );
   }
 }
 
-class EmojiHomePage extends StatefulWidget {
+
+
+class EmojiListScreen extends StatefulWidget {
+  const EmojiListScreen({Key? key}) : super(key: key);
+
   @override
-  _EmojiHomePageState createState() => _EmojiHomePageState();
+  EmojiListScreenState createState() => EmojiListScreenState();
 }
 
-class _EmojiHomePageState extends State<EmojiHomePage> {
-  final TextEditingController _contextController = TextEditingController();
-  final TextEditingController _emojiController = TextEditingController();
-  final List<String> listEmoji = ["😀", "😃", "😄"]; // Aqui você pode adicionar mais emojis conforme necessário
+class EmojiListScreenState extends State<EmojiListScreen> {
+  late Map<String, String> emojis;
+  Map<String, String> filteredEmojis = {};
+  final TextEditingController _controller = TextEditingController();
+
+  EmojiListScreenState() {  //Non-nullable instance field 'emojis' must be initialized.
+    emojis =  {  "100":"💯","1234":"🔢","guarda-chuva":"☔","café":"☕","aries":"♈","taurus":"♉",'sagitário um': '♐', 'capricórnio': '♑', 'aquário': '♒', 'peixes': '♓', 'âncora': '⚓', 'marca de seleção': '✅', 'brilhos': '✨', 'perguntar': '❓', 'pergunta  vazia': '❔', 'exclamação': '❕', 'Exclamar': '❗', 'mais': '➕', 'menos': '➖', 'divisão': '➗', 'hash': '#️⃣', 'estrela céo': '*️⃣', 'zero': '0️⃣', 'um': '1️⃣', 'dois': '2️⃣', 'três': '3️⃣', 'quatro': '4️⃣', 'cinco': '5️⃣', 'seis': '6️⃣', 'sete': '7️⃣', 'oito': '8️⃣', 'nove': '9️⃣', 'direitos autorais': '©️', 'cadastrado': '®️', 'mahjong': '🀄', 'coringa': '🃏', 'uma': '🅰️', 'b': '🅱️', 'o2': '🅾️', 'estacionamento': '🅿️', 'ab': '🆎','cl': '🆑',   'legal': '🆒', 'grátis': '🆓', 'identificação': '🆔', 'novo': '🆕', 'ng': '🆖', 'ok': '🆗', 'sos': '🆘', 'acima': '🆙', 'contra': '🆚', 'ac': '🇦🇨', 'anúncio': '🇦🇩', 'ae': '🇦🇪', 'de': '🇦🇫', 'ag': '🇦🇬', 'ai': '🇦🇮', 'al': '🇦🇱', 'sou': '🇦🇲', 'ao': '🇦🇴', 'aq': '🇦🇶', 'ar': '🇦🇷', 'as': '🇦🇸', 'em': '🇦🇹', 'au': '🇦🇺', 'aw': '🇦🇼', 'ax': '🇦🇽', 'az': '🇦🇿', 'ba': '🇧🇦', 'bb': '🇧🇧', 'be': '🇧🇪', 'bf': '🇧🇫', 'bg': '🇧🇬', 'bh': '🇧🇭', 'bi': '🇧🇮', 'bj': '🇧🇯', 'bl': '🇧🇱', 'bm': '🇧🇲', 'bn': '🇧🇳', 'bo': '🇧🇴', 'bq': '🇧🇶', 'br': '🇧🇷', 'bs': '🇧🇸', 'bt': '🇧🇹', 'bv': '🇧🇻', 'bw': '🇧🇼', 'by': '🇧🇾', 'bz': '🇧🇿', 'ca': '🇨🇦', 'cc': '🇨🇨', 'cd': '🇨🇩', 'cf': '🇨🇫', 'cg': '🇨🇬', 'ch': '🇨🇭', 'ci': '🇨🇮', 'ck': '🇨🇰', 'cls': '🇨🇱', 'cm': '🇨🇲', 'cn': '🇨🇳', 'cns': '🇨🇳', 'co': '🇨🇴', 'cp': '🇨🇵', 'cr': '🇨🇷', 'cu': '🇨🇺', 'cv': '🇨🇻', 'cx': '🇨🇽', 'cy': '🇨🇾', 'cz': '🇨🇿', 'des': '🇩🇪', 'dg': '🇩🇬', 'DJ': '🇩🇯', 'Reino Unido': '🇩🇰', 'dm': '🇩🇲', 'do': '🇩🇴', 'dz': '🇩🇿', 'e': '🇪🇹', 'ec': '🇪🇨', 'ee': '🇪🇪', 'eg': '🇪🇬', 'eh': '🇪🇭', 'er': '🇪🇷', 'é': '🇪🇸', 'es': '🇪🇸', 'eu': '🇪🇺', 'fi': '🇫🇮', 'fj': '🇫🇯', 'fk': '🇫🇰', 'dc': '🇫🇲', 'fo': '🇫🇴', 'fr': '🇫🇷', 'frs': '🇫🇷', 'deu': '🇬🇦', 'gb': '🇬🇧', 'Reino Unidos': '🇬🇧', 'gd': '🇬🇩', 'ge': '🇬🇪', 'gf': '🇬🇫', 'gh': '🇬🇭', 'gi': '🇬🇮', 'gl': '🇬🇱', 'GM': '🇬🇲', 'gn': '🇬🇳', 'GP': '🇬🇵', 'gq': '🇬🇶', 'gr': '🇬🇷', 'gs': '🇬🇸', 'gt': '🇬🇹', 'gu': '🇬🇺', 'gw': '🇬🇼', 'gy': '🇬🇾', 'hk': '🇭🇰', 'hm': '🇭🇲', 'hn': '🇭🇳', 'hora': '🇭🇷', 'ht': '🇭🇹', 'hu': '🇭🇺', 'IC': '🇮🇨', 'id bandeira': '🇮🇩', 'bandeira': '🇮🇪', 'il': '🇮🇱', 'im': '🇮🇲', 'in': '🇮🇳', 'io': '🇮🇴', 'QI': '🇮🇶', 'ir': '🇮🇷', 'is': '🇮🇸', 'isto': '🇮🇹', 'it': '🇮🇹', 'je': '🇯🇪', 'jm': '🇯🇲', 'jo': '🇯🇴', 'jp': '🇯🇵', 'ke': '🇰🇪', 'kg': '🇰🇬', 'kh': '🇰🇭', 'ki': '🇰🇮', 'km': '🇰🇲', 'kn': '🇰🇳', 'kp': '🇰🇵', 'kr': '🇰🇷', 'kw': '🇰🇼', 'ky': '🇰🇾', 'kz': '🇰🇿', 'la': '🇱🇦', 'lb': '🇱🇧', 'lc': '🇱🇨', 'li': '🇱🇮', 'lk': '🇱🇰', 'lr': '🇱🇷', 'ls': '🇱🇸', 'lt': '🇱🇹', 'lu': '🇱🇺', 'lv': '🇱🇻', 'th': '🇹🇭', 'ma': '🇲🇦', 'mc': '🇲🇨', 'MD': '🇲🇩', 'me': '🇲🇪', 'mf': '🇲🇫', 'mg': '🇲🇬', 'mh': '🇲🇭', 'mk': '🇲🇰', 'ml': '🇲🇱', 'mm': '🇲🇲', 'mn': '🇲🇳', 'mo': '🇲🇴', 'mq': '🇲🇶', 'mr': '🇲🇷', 'ms': '🇲🇸', 'mt': '🇲🇹', 'mu': '🇲🇺', 'mv': '🇲🇻', 'mw': '🇲🇼', 'mx': '🇲🇽', 'my': '🇲🇾', 'mz': '🇲🇿', 'na': '🇳🇦', 'nc': '🇳🇨', 'ne': '🇳🇪', 'nf': '🇳🇫', 'ngs': '🇳🇬',  'ni': '🇳🇮', 'nl': '🇳🇱', 'no': '🇳🇴', 'np': '🇳🇵', 'nr': '🇳🇷', 'nu': '🇳🇺', 'nz': '🇳🇿', 'om': '🇴🇲', 'pa': '🇵🇦', 'pe': '🇵🇪', 'pf': '🇵🇫', 'pg': '🇵🇬', 'ph': '🇵🇭', 'pk': '🇵🇰', 'pl': '🇵🇱', 'pm': '🇵🇲', 'pn': '🇵🇳', 'pr': '🇵🇷', 'ps': '🇵🇸', 'pw': '🇵🇼', 'py': '🇵🇾', 'qa': '🇶🇦', 're': '🇷🇪', 'ro': '🇷🇴', 'rs': '🇷🇸', 'ru': '🇷🇺', 'rus': '🇷🇺', 'rw': '🇷🇼', 'sa': '🇸🇦', 'sb': '🇸🇧', 'sc': '🇸🇨', 'sd': '🇸🇩', 'se': '🇸🇪', 'sg': '🇸🇬', 'sh': '🇸🇭', 'si': '🇸🇮', 'sj': '🇸🇯', 'sk': '🇸🇰', 'sl': '🇸🇱', 'sm': '🇸🇲', 'sn': '🇸🇳', 'so': '🇸🇴', 'sr': '🇸🇷', 'ss': '🇸🇸', 'st': '🇸🇹', 'SV': '🇸🇻', 'sx': '🇸🇽', 'sy': '🇸🇾', 'sz': '🇸🇿', 'ta': '🇹🇦', 'tc': '🇹🇨', 'td': '🇹🇩', 'tf': '🇹🇫', 'tg': '🇹🇬', 'tj': '🇹🇯', 'tk': '🇹🇰', 'tl': '🇹🇱', 'tm': '🇹🇲', 'tn': '🇹🇳', 'to': '🇹🇴', 'tr': '🇹🇷', 'tt': '🇹🇹', 'tv': '🇹🇻', 'tw': '🇹🇼', 'tz': '🇹🇿', 'você': '🇾🇪', 'ug': '🇺🇬', 'un': '🇺🇳', 'us': '🇺🇸', 'uz': '🇺🇿', 'va': '🇻🇦', 'vc': '🇻🇨', 've': '🇻🇪', 'vg': '🇻🇬', 'vi': '🇻🇮', 'vn': '🇻🇳', 'vu': '🇻🇺', 'wf': '🇼🇫', 'ws': '🇼🇸', 'xk': '🇽🇰', 'yt': '🇾🇹', 'za': '🇿🇦', 'zm': '🇿🇲', 'zw': '🇿🇼', 'koko': '🈁', 'sa1': '🈂️', 'u7121': '🈚', 'u6307': '🈯', 'u7981': '🈲', 'u7a7a': '🈳', 'u5408': '🈴', 'u6e80': '🈵', 'u6709': '🈶', 'u6708': '🈷️', 'u7533': '🈸', 'u5272': '🈹', 'u55b6': '🈺', 'vantagem ideográfica': '🉐', 'aceitar': '🉑', 'ciclone': '🌀​​', 'nebuloso': '🌁', 'guarda chuva': '🌂', 'noite': '🌃', 'amanhecer montanha': '🌄', 'amanhecer': '🌅', 'entardecer': '🌆', 'amanhecer cidade': '🌇', 'arco íris': '🌈', 'ponte à noite': '🌉', 'oceano': '🌊', 'vulcão': '🌋', 'via láctea': '🌌', 'África': '🌍', 'Américas': '🌎', 'Ásia': '🌏', 'globo': '🌐', 'lua nova': '🌑', 'lua crescente': '🌙', 'lua': '🌔', 'lua minguante crescente': '🌔', 'lua cheia': '🌕', 'lua minguante minguante': '🌖', 'lua minguante': '🌗', 'lua crescente minguante': '🌘', 'lua nova com rosto': '🌚', 'lua minguante com rosto': '🌜', 'lua cheia com rosto': '🌝', 'sol com rosto': '🌞', 'estrelão': '🌟', 'estrelas': '🌠', 'termômetro': '🌡️', 'nuvem ensolarada': '🌤️', 'sol nuvem': '🌤️', 'pouco ensolarado': '🌥️', 'sol atrás da nuvem': '🌥️', 'chuva parcialmente ensolarada': '🌦️', 'sol atrás de nuvem de chuva': '🌦️', 'nuvem de chuva': '🌧️', 'nuvem de neve': '🌨️', 'relâmpago': '🌩️', 'nuvem relâmpago': '🌩️', 'tornado': '🌪️', 'nuvem de tornado': '🌪️', 'nevoeiro': '🌫️', 'vento soprando no rosto': '🌬️', 'cachorro quente': '🌭', 'taco': '🌮', 'burrito': '🌯', 'castanha': '🌰', 'muda': '🌱', 'árvore perene': '🌲', 'árvore caducifólia': '🌳', 'palmeira': '🌴', 'cacto': '🌵', 'pimenta picante': '🌶️', 'tulipa': '🌷', 'flor cerejeira': '🌸', 'flor rosa': '🌹', 'flor hibisco': '🌺', 'flor girassol': '🌻', 'florescer': '🌼', 'milho': '🌽', 'espiga de arroz': '🌾', 'erva': '🌿', 'trevo de quatro folhas': '🍀', 'folha de bordo': '🍁', 'folha caída': '🍂', 'folhas': '🍃', 'cogumelo': '🍄', 'tomate': '🍅', 'berinjela': '🍆', 'uvas': '🍇', 'melão': '🍈', 'melancia': '🍉', 'tangerina': '🍊', 'limão': '🍋', 'bananeira': '🍌', 'abacaxi': '🍍', 'maçã': '🍎', 'maçã verde': '🍏', 'pêra': '🍐', 'pêssego': '🍑', 'cerejas': '🍒', 'morango': '🍓', 'hambúrguer': '🍔', 'pizza': '🍕', 'carne com osso': '🍖', 'perna de frango': '🍗', 'biscoito de arroz': '🍘', 'bolinho de arroz': '🍙', 'arroz': '🍚', 'caril': '🍛', 'ramen': '🍜', 'espaguete': '🍝', 'pão': '🍞', 'batatas fritas': '🍟', 'batata doce': '🍠', 'dango': '🍡', 'oden': '🍢', 'sushi': '🍣', 'camarão frito': '🍤', 'bolo de peixe': '🍥', 'sorvete': '🍨', 'gelo raspado': '🍧', 'rosquinha': '🍩', 'biscoito': '🍪', 'barra de chocolate': '🍫', 'doce': '🍬', 'pirulito': '🍭', 'creme': '🍮', 'pote de mel': '🍯', 'bolo': '🍰', 'bento': '🍱', 'ensopado': '🍲', 'ovo frito': '🍳', 'cozinhando': '🍳', 'garfo e faca': '🍴', 'chá': '🍵', 'amor': '🍶', 'copo de vinho': '🍷', 'coquetel': '🍸', 'bebida tropical': '🍹', 'cerveja': '🍺', 'cervejas': '🍻', 'mamadeira': '🍼', 'placa de garfo de faca': '🍽️', 'champanhe': '🍾', 'pipoca': '🍿', 'fita': '🎀', 'presente': '🎁', 'aniversário': '🎂', 'jack o lanterna': '🎃', 'árvore de natal': '🎄', 'Papai Noel': '🎅', '🎆fogos de artifício': '', 'diamante': '🎇', 'balão': '🎈', 'tada': '🎉', 'bola de confete': '🎊', 'árvore tanabata': '🎋', 'bandeiras cruzadas': '🎌', 'bambu': '🎍', 'bonecos': '🎎', 'bandeiras': '🎏', 'carrilhão de vento': '🎐', 'cena do arroz': '🎑', 'mochila escolar': '🎒', 'placa de argamassa': '🎓', 'medalha': '🎖️', 'fita de lembrete': '🎗️', 'microfone de estúdio': '🎙️', 'controle deslizante de nível': '🎚️', 'botões de controle': '🎛️', 'quadros de filme': '🎞️', 'ingressos': '🎟️', 'cavalo de carrossel': '🎠', 'roda gigante': '🎡', 'montanha russa': '🎢', 'vara de pescar e peixes': '🎣', 'microfone': '🎤', 'câmera de cinema': '🎥', 'cinema': '🎦', 'fones de ouvido': '🎧', 'arte': '🎨', 'cartola': '🎩', 'tenda de circo': '🎪', 'bilhete': '🎫', 'badalo': '🎬', 'artes cênicas': '🎭', 'videogame': '🎮', 'dardo': '🎯', 'caça níqueis': '🎰', 'dado do jogo': '🎲', 'boliche': '🎳', 'cartas de jogo de flores': '🎴', 'nota musical': '🎵', 'notas': '🎶', 'saxofone': '🎷', 'guitarra': '🎸', 'teclado musical': '🎹', 'trombeta': '🎺', 'violino': '🎻', 'partitura musical': '🎼', 'camisa de corrida com faixa': '🎽', 'tênis': '🎾', 'esquiar': '🎿', 'basquete': '🏀', 'quadriculada': '🏁', 'snowboarder': '🏂', 'correndo': '🏃‍','surfando': '🏄', 'medalha esportiva': '🏅', 'troféu': '🏆', 'corridas de cavalos': '🏇', 'futebol': '⚽', 'futebol de rugby': '🏉', 'nadando': '🏊', 'levantando pesos': '🏋️️', 'golfe': '🏌️', 'motocicleta ': '🏍️', 'carro': '🏎️', 'críquete': '🏏', 'voleibol': '🏐', 'hóquei': '🏑', 'hóquei gelo': '🏒', 'tênis mesa': '🏓', 'montanha neve': '🏔️', 'acampar': '🏕️', 'praia': '🏖️', 'construção civil': '🏗️', 'edifícios residenciais': '🏘️', 'paisagem urbana': '🏙️', 'construção de casa ': '🏚️', 'edifício clássico': '🏛️', 'deserto': '🏜️', 'ilha deserta': '🏝️', 'parque nacional': '🏞️', 'estádio': '🏟️', 'casa': '🏠', 'casa com jardim': '🏡', 'escritório': '🏢', 'correios': '🏣', 'correios europeus': '🏤', 'hospitalar': '🏥', 'banco': '🏦', 'caixa eletrônico': '🏧', 'hotel': '🏨', 'hotel de amor': '🏩', 'loja conveniência': '🏪', 'escola': '🏫', 'loja departamentos': '🏬', 'fábrica': '🏭', 'lanterna izakaya': '🏮', 'lanterna': '🔦', 'castelo japonês': '🏯', 'castelo europeu': '🏰', 'do arco íris': '🏳️‍🌈', 'transgênero': '🏳️‍⚧️', 'agitando branca': '🏳️', 'pirata': '🏴‍☠️', 'da Inglaterra': '🏴󠁧󠁢󠁥󠁮󠁧󠁿', 'da Escócia': '🏴󠁧󠁢󠁳󠁣󠁴󠁿', 'do País de Gales': '🏴󠁧󠁢󠁷󠁬󠁳󠁿', 'agitando preta': '🏴', 'roseta': '🏵️', 'rótulo': '🏷️', 'arco e flecha': '🏹', 'ânfora': '🏺', 'tom de pele 2': '🏻', 'tom de pele 3': '🏼', 'tom de pele 4': '🏽', 'tom de pele 5': '🏾', 'tom de pele 6': '🏿', 'rato': '🐭', 'rato ': '🐁', 'boi': '🐂', 'búfalo': '🐃', 'vaca': '🐄', 'tigre': '🐅', 'leopardo': '🐆', 'coelho': '🐇', 'gato preto': '🐈‍⬛', 'gato': '🐈', 'dragão': '🐉', 'crocodilo': '🐊', 'baleia': '🐋', 'caracol': '🐌', 'cobra': '🐍', 'cavalo ': '🐎', 'carneiro': '🐏', 'cabra': '🐐', 'ovelhas': '🐑', 'macaco': '🐒', 'galo': '🐓', 'frango': '🐔', 'cão de serviço': '🐕‍🦺', 'cachorro': '🐕', 'porco': '🐖', 'javali': '🐗', 'elefante': '🐘', 'polvo': '🐙', 'casca': '🐚', 'erro': '🐛', 'formiga': '🐜', 'abelha': '🐝', 'joaninha': '🐞', 'peixe': '🐟', 'peixes tropicais': '🐠', 'baiacu': '🐡', 'tartaruga': '🐢', 'pintinho incubação': '🐣', 'pintinho': '🐤', 'pintinho nascido': '🐥', 'pássaro': '🐦', 'pinguim': '🐧', 'coala': '🐨', 'poodle': '🐩', 'camelo dromedário': '🐪', 'camelo': '🐫', 'golfinho': '🐬', 'nadadeira': '🐬', 'vaca ': '🐮', 'tigre ': '🐯', 'coelho ': '🐰', 'gato ': '🐱', 'cara de dragão': '🐲', 'baleia ': '🐳', 'cavalo': '🐴', 'cara de macaco': '🐵', 'cachorro ': '🐶', 'porco ': '🐷', 'sapo': '🐸', 'hamster': '🐹', 'lobo': '🐺', 'urso polar': '🐻‍❄️', 'urso': '🐻', 'cara de panda': '🐼', 'nariz de porco': '🐽', 'pés': '🐾', 'pegadas': '👣', 'esquilo': '🐿️', 'olhos': '👀', 'olho na fala': '👁️‍🗨️', 'olho': '👁️', 'orelha': '👂', 'nariz': '👃', 'lábios': '👄', 'língua': '👅', 'apontar acima': '👆', 'apontar abaixo': '👇', 'aponte a esquerda': '👈', 'aponte a direita': '👉', 'soco facial': '👊', 'soco': '👊', 'abanar': '👋', 'ok mão': '👌', 'positivo': '👍', 'polegar para cima': '👍', 'negativo': '👎', 'polegar abaixo': '👎', 'bater palmas': '👏', 'mãos abertas': '👐', 'coroa': '👑', 'chapéu feminino': '👒', 'óculos': '🥽', 'gravata': '👔', 'camisa': '👕', 'camiseta': '👕', 'jeans': '👖', 'vestido': '👗', 'quimono': '👘', 'biquíni': '👙', 'roupas femininas': '👚', 'bolsa': '👝', 'sapato': '👞', 'sapato esportivo': '👟', 'salto alto': '👠', 'sandália': '👡', 'bota': '👢', 'busto': '👤', 'bustos': '👥', 'menino': '👦', 'menina': '👧', 'agricultor': '👨‍🌾', 'cozinheiro': '👨‍🍳', 'alimentando bebê': '👨‍🍼', 'estudante': '👨‍🎓', 'cantor ': '👨‍🎤', 'artista ': '👨‍🎨', 'professor ': '👨‍🏫', 'operário ': '👨‍🏭', 'grupo reunião': '👨‍👦‍',  'casal': '👨‍👧‍', 'tecnólogo ': '👨‍💻', 'trabalhador de escritório ': '👨‍💼', 'careca': '👨‍🦲', 'idoso': '👨‍🦳', 'cadeirante': '👨‍‍🦽', 'médico': '👨‍⚕️', 'juiz': '👨‍⚖️', 'homem': '👨', 'agricultora': '👩‍🌾', 'cozinheira': '👩‍🍳', 'alimentando o bebê': '👩‍🍼', 'aluna': '👩‍🎓', 'cantora': '👩‍🎤', 'artista': '👩‍🎨', 'professora': '👩‍🏫', 'trabalhadora': '👩‍🏭',  'tecnóloga ': '👩‍💻', 'trabalhadora escritório': '👩‍💼', 'mecânica': '👩‍🔧', 'cientista': '👩‍🔬', 'astronauta': '👩‍🚀', 'bengala': '👩‍🦯', 'mulher ruiva': '👩‍🦰', 'mulher cacheados': '👩‍🦱', 'mulher careca': '👩‍🦲', 'idosa': '👩‍🦳', 'cadeirante ': '👩‍🦽', 'médica': '👩‍⚕️', 'juíza': '👩‍⚖️', 'piloto ': '👩‍✈️', 'beijo': ' ❤ 💋‍', 'beija mulher': '❤ 💋‍👩', 'mulher': '👩', 'casal ': '👫',  'policial ': '👮‍', 'mulher ': '👯',  'com véu': '👰',  'gua pi mao': '👲', 'turbante': '👳‍', 'velho': '👴', 'velha': '👵', 'bebê': '👶', 'trabalhador': '👷‍',  'princesa': '👸', 'ogro japonês': '👹', 'duende japonês': '👺', 'fantasma': '👻', 'anjo': '👼', 'alienígena': '👽', 'invasor do espaço': '👾', 'imp': '👿', 'crânio': '💀', 'informações': '💁‍',  'guarda': '💂', 'dançarina': '💃', 'batom': '💄', 'manicure': '💅', 'massagem': '💆‍', 'cortando o cabelo': '💇‍', 'barbeiro': '💈', 'seringa': '💉', 'pílula': '💊', 'beijo ': '💋', 'carta de amor': '💌', 'anel': '💍', 'gema': '💎', 'beijo de casal': '💏', 'buquê': '💐', 'amantes': '💑', 'casamento': '💒', 'batimento cardíaco': '💓', 'coração partido': '💔', 'dois corações': '💕', 'coração brilhante': '💖', 'pulso cardíaco': '💗', 'Cupido': '💘', 'coração azul': '💙', 'coração verde': '💚', 'coração amarelo': '💛', 'coração roxo': '💜', 'coração de presente': '💝', 'corações giratórios': '💞', 'decoração de coração': '💟', 'diamante ': '💠', 'lâmpada': '💡', 'raiva': '😡', 'bomba': '💣', 'zzz': '💤', 'estrondo': '💥', 'colisão': '💥', 'gotas de suor': '💦', 'gota': '💧', 'traço': '💨', 'lenço': '🧣', 'cocô': '💩', 'merda': '💩', 'músculo': '💪', 'tontura': '💫', 'balão de fala': '💬', 'balão de pensamento': '💭', 'flor branca': '💮', 'câmbio de moeda': '💱', 'cifrão pesado': '💲', 'cartão de crédito': '💳', 'ienes': '💴', 'dólar': '💵', 'euros': '💶', 'libra': '♎', 'dinheiro voador': '💸', 'gráfico': '💹', 'assento': '💺', 'computador': '💻', 'pasta': '💼', 'minidisco': '💽', 'disquete': '💾', 'disco': '💿', 'dvd': '📀', 'pasta de arquivos': '📁', 'pasta arquivo': '📂', 'página com curl': '📃', 'página': '📄', 'data': '📅', 'calendário': '📆', 'CONTATOS': '📇📞', 'índice do cartão': '📇', 'gráfico ascendente': '📈', 'gráfico descendente': '📉', 'gráfico de barras': '📊','TAREFAS': '📋', 'área de transferência': '📋', 'alfinete': '📌', 'alfinete redondo': '📍', 'clipe de papel': '📎', 'régua triangular': '📐', 'guias de favoritos': '📑', 'razão': '📒', 'caderno': '📓', 'caderno ': '📔', 'livro fechado': '📕', 'livro': '📖', 'livro aberto': '📖', 'livro verde': '📗', 'livro azul': '📘', 'livro laranja': '📙', 'livros': '📚', 'crachá': '📛', 'rolar': '📜', 'documentar memorando': '📝', 'lápis': '📝', 'telefone': '📞', 'pager': '📟', 'fax': '📠', 'antena': '📡', 'alto falante': '📢', 'mega': '📣', 'bandeja saídas': '📤', 'bandeja entradas': '📥', 'pacote': '📦', 'e mail': '✉️', 'envelope entrada': '📨', 'envelope seta': '📩', 'correio fechada': '📪', 'caixa de correio': '📫', 'caixa sem correio': '📭', 'caixa postal': '📮', 'buzina postal': '📯', 'jornal': '📰', 'iphone celular': '📱', 'chamando': '📲', 'modo vibração': '📳', 'desligado': '📴', 'proibido celulare': '📵', 'sinal': '📶', 'câmera': '📷', 'flash': '📸', 'câmera vídeo': '📹', 'televisão': '📺', 'rádio': '📻', 'vhs': '📼', 'projetor': '📽️', 'terço': '📿', 'setas torcidas': '🔀', 'repita': '🔁', 'repita um': '🔂', 'setas sentido horário': '🔃', 'setas anti horário': '🔄', 'baixo brilho': '🔅', 'alto brilho': '🔆', 'mudo': '🔇', 'palestrante': '🔈', 'som': '🔉', 'som alto': '🔊', 'bateria': '🔋', 'plugue elétrico': '🔌', 'zoon': '🔍', 'zoon à direita': '🔎', 'fechadura a chave': '🔐', 'MyPin: chave autenticação ControleAcesso ': '🔑', 'bloquear': '🔒', 'desbloquear': '🔓', 'sino': '🔔', 'sem campainha': '🔕', 'marcador': '🔖', 'ligação': '🔗', 'botão de opção': '🔘', 'voltar': '🔙', 'fim': '🔚', 'entre': '🔛', 'em breve': '🔜', 'topo': '🔝', 'menor de idade': '🔞', 'tecla dez': '🔟', 'abcd maiúsculo': '🔠', 'abcd': '🔡', 'símbolos': '🔣', 'abc': '🔤', 'fogo': '🔥', 'MyComp: Ferramenta Configurações': '🔧', 'martelo': '🔨', 'porca e parafuso': '🔩', 'hocho': '🔪', 'faca': '🔪', 'arma': '🔫', 'microscópio': '🔬', 'telescópio': '🔭', 'estrela de seis pontas': '🔯', 'iniciante': '🔰', 'tridente': '🔱', 'botão quadrado ': '🔲', 'botão quadrado vazio': '🔳', 'círculo ': '🔴', ' círculo ': '🔵', 'diamante   ': '🔶', 'diamante  ': '🔷', 'diamante    ': '🔸', 'diamante     ': '🔹', 'triângulo': '🔺', 'triângulo ': '🔻', 'seta': '🔼', 'seta ': '🔽', 'simbolo': '🕉️', 'pomba da paz': '🕊️', 'Caaba': '🕋', 'mesquita': '🕌', 'sinagoga': '🕍', 'menorá': '🕎', 'relógio1': '🕐', 'relógio2': '🕑', 'relógio3': '🕒', 'relógio4': '🕓', 'relógio5': '🕔', 'relógio6': '🕕', 'relógio7': '🕖', 'relógio8': '🕗', 'relógio9': '🕘', 'relógio10': '🕙', 'relógio11': '🕚', 'relógio12': '🕛', 'relógio1e30': '🕜', 'relógio2e30': '🕝', 'relógio3e30': '🕞', 'relógio4e30': '🕟', 'relógio5e30': '🕠', 'relógio6e30': '🕡', 'relógio7e30': '🕢', 'relógio8e30': '🕣', 'relógio9e30': '🕤', 'relógio10e30': '🕥', 'relógio11e30': '🕦', 'relógio12e30': '🕧', 'vela': '🕯️', 'relógio': '🕰️', 'buraco': '🕳️', 'levitando': '🕴️', 'detetive': '🕵️',  'óculos ': '🕶️', 'aranha': '🕷️', 'teia': '🕸️', 'joystick': '🕹️', 'dançando': '🕺', 'clipes': '🖇️', 'caneta': '🖋️', 'pincel': '🖌️', 'lápis ': '🖍️', 'mão': '🖐️', 'dedo médio': '🖕', 'mão invertida': '🖕', 'mão de Spock': '🖖', 'coração ': '🖤', 'computador desktop': '🖥️', 'impressora': '🖨️', 'mouse ': '🖱️', 'trackball': '🖲️', 'moldura com foto': '🖼️', 'divisores ': '🗂️', 'caixa de arquivo': '🗃️', 'arquivo': '🗄️', 'cesto de lixo': '🗑️', 'bloco espiral': '🗒️', 'calendário ': '🗓️', 'compressão': '🗜️', 'chave antiga': '🗝️', 'jornal enrolado': '🗞️', 'faca punhal': '🗡️', 'cabeça silhueta': '🗣️', 'bolha de raiva': '🗯️', 'urna de voto': '🗳️', 'mapa mundial': '🗺️', 'Monte Fuji': '🗻', 'torre de Tóquio': '🗼', 'estátua da liberdade': '🗽', 'Japão': '🗾', 'moyai': '🗿', 'sorrindo': '😀', 'sorrir': '😁', 'alegria': '😂', 'sorridente': '😃', 'sorria': '😏', 'sorriso de suor': '😅', 'rindo': '😆', 'satisfeito': '😆', 'inocente': '😇',  'piscadela': '😉', 'corar': '😊', 'hum': '😋', 'aliviado': '😌', 'olhos de coração': '😍', 'óculos de sol': '😎', 'rosto neutro': '😐', 'inexpressivo': '😑', 'sem graça': '😒', 'suor': '😓', 'pensativo': '😔', 'confuso': '😖', 'beijando coração': '😘', 'beijando olhos sorridentes': '😙', 'beijando olhos fechados': '😚', 'língua de fora': '😛', 'língua de fora e piscando': '😜', 'língua de fora, olhos fechados': '😝', 'decepcionado': '😞', 'preocupado': '😟', 'irritado': '😠', 'chorar': '😢', 'perseverar': '😣', 'triunfo': '😤', 'desapontado aliviado': '😥', 'franzindo a testa': '😦', 'angustiado': '😧', 'com medo': '😨', 'cansado': '😩', 'sonolento': '😪', 'cansado ': '😫', 'careta': '😬', 'soluçar': '😭', 'rosto expirando': '😮‍💨', 'boca aberta': '😮', 'silenciado': '😯', 'suor frio': '😰', 'gritar': '😱', 'surpreso': '😲', 'corado': '😳', 'dormindo': '😴', 'rosto olhos espirais': '😵‍💫', 'rosto tonto': '😵', 'rosto nas nuvens': '😶‍🌫️', 'sem boca': '😶', 'máscara': '😷', 'sorri gato': '😸', 'alegria gato': '😹', 'gato sorridente': '😺', 'gato  ': '😻', 'gato   ': '😼', 'gato beijando': '😽', 'gato com beicinho': '😾', 'gato chorando': '😿', 'gato    ': '🙀', 'carrancudo': '🙁', 'sorridente ': '🙂', 'cabeça pra baixo': '🙃', 'olhos revirados': '🙄', 'não é bom': '🙅‍', 'gesticulando ok': '🙆‍',  'se curvando': '🙇‍',  'não fale mal': '🙈',  'levantando a mão': '🙋‍',  'mãos levantadas': '🙌', 'franzindo a testa ': '🙍‍',  'fazendo beicinho': '🙎‍', 'orar': '🙏', 'foguete': '🧨', 'helicóptero': '🚁', 'locomotiva': '🚂', 'vagão ferroviário': '🚃', 'trem bala': '🚄',  'trem2': '🚆', 'metrô': '🚇', 'metrô ': '🚈', 'estação': '🚉', 'bonde': '🚊', 'treinar': '🚋', 'ônibus': '🚌', 'ônibus se aproxima': '🚍', 'trólebus': '🚎', 'ponto de ônibus': '🚏', 'microônibus': '🚐', 'ambulância': '🚑', 'viatura de bombeiros': '🚒', 'viatura da polícia': '🚓', 'viatura da polícia se aproxima': '🚔', 'táxi': '🚕', 'táxi se aproxima': '🚖', 'carro ': '🚗', 'carro vermelho': '🚗', 'automóvel se aproxima': '🚘', 'carro azul': '🚙', 'caminhão': '🚚', 'caminhão articulado': '🚛', 'trator': '🚜', 'monotrilho': '🚝', 'ferrovia de montanha': '🚞', 'ferrovia suspensa': '🚟', 'teleférico de montanha': '🚠', 'bonde aéreo': '🚡', 'navio': '🚢', 'barco a remo': '🚣‍', 'lancha': '🚤', 'semáforo': '🚥', 'semáforo vertical': '🚦', 'construção': '🚧', 'luz rotativa': '🚨', 'triangular no poste': '🚩', 'porta': '🚪', 'fumar': '🚬', 'não fumar': '🚭', 'lixo no seu lugar': '🚮', 'não jogue lixo': '🚯', 'água potável': '🚰', 'água não potável': '🚱', 'bicicleta': '🚲', 'sem bicicletas': '🚳',  'ciclista': '🚴‍', 'mountain bike': '🚵‍',  'ciclista montanha': '🚵‍', 'caminhando': '🚶‍', 'andando': '🚶‍♂️', 'sem pedestres': '🚷', 'crianças atravessando': '🚸', 'homens': '🚹', 'mulheres': '🚺', 'banheiro': '🚾', 'bebê ': '🚼', 'chuveiro': '🚿', 'banho': '🛀', 'banheira': '🛁', 'controle passaporte': '🛂', 'alfândega': '🛃', 'bagagem': '🛄', 'bagagem deixada': '🛅', 'sofá e luminária': '🛋️', 'alojamento': '🛌', 'sacolas compras': '🛍️', 'campainha': '🛎️', 'cama': '🛏️', 'local de culto': '🛐', 'sinal octogonal': '🛑', 'carrinho de compras': '🛒', 'templo hindu': '🛕', 'cabana': '🛖', 'elevador': '🛗', 'martelo e chave inglesa': '🛠️', 'escudo': '🛡️', 'tambor de óleo': '🛢️', 'autoestrada': '🛣️', 'via férrea': '🛤️', 'barco a motor': '🛥️', 'avião pequeno': '🛩️', 'partida do avião': '🛫', 'avião chegando': '🛬', 'satélite': '🛰️', 'navio de passageiros': '🛳️', 'scooter': '🛴', 'motoneta': '🛵', 'canoa': '🛶', 'trenó': '🛷', 'disco voador': '🥏', 'skate': '🛹', 'riquixá': '🛺', 'caminhonete': '🛻', 'patins': '🛼', 'círculo laranja': '🟠', 'círculo amarelo': '🟡', 'círculo verde': '🟢', 'círculo roxo': '🟣', 'círculo marrom': '🟤', 'quadrado vermelho': '🟥', 'quadrado azul': '🟦', 'quadrado laranja': '🟧', 'quadrado amarelo': '🟨', 'quadrado verde': '🟩', 'quadrado roxo': '🟪', 'quadrado marrom': '🟫', 'dedos comprimidos': '🤌', 'coração branco': '🤍', 'coração marrom': '🤎', 'mão beliscando': '🤏', 'boca com zíper': '🤐', 'boca de dinheiro': '🤑', 'rosto com termômetro': '🤒', 'cara de nerd': '🤓', 'cara pensante': '🤔', 'rosto com bandagem ': '🤕', 'abraçando o rosto': '🤗', 'os chifres': '🤘', 'sinal dos chifres': '🤘', 'me chame de mão': '🤙', 'dorso da mão': '🤚', 'punho a esquerda': '🤛', 'punho a direita': '🤜', 'aperto de mão': '🤝', 'dedos cruzados': '🤞', 'mão dedos cruzados': '🤞', 'te amo sinal': '🤟', 'cowboy': '🤠', 'palhaço': '🤡', 'cara enjoada': '🤢', 'rolando de rir': '🤣', 'cara babando': '🤤', 'rosto deitado': '🤥',  'palma da face': '🤦', 'cara espirrando': '🤧', 'sobrancelha levantada': '🤨', ' sobrancelha levantada': '🤨', 'estrela atingida': '🤩', 'cara maluca': '🤪', 'rosto sorridente': '🤪', 'cara calada': '🤫', 'rosto lábios fechados': '🤫', 'rosto com símbolo': '🤬', 'rosto mão na boca': '🤭', 'rosto sorridente ': '🤭', 'vômito facial': '🤮', 'rosto com vômito': '🤮', 'cabeça explodindo': '🤯', 'rosto chocado': '🤯', 'mulher grávida': '🤰', 'amamentação': '🤱', 'palmas juntas': '🤲', 'selfie': '🤳', 'príncipe': '🤴',  'smoking': '🤵', 'senhora noel': '🤶',  'encolher os ombros': '🤷',  'cambalhota': '🤸',  'malabarismo': '🤹', 'esgrimista': '🤺', 'lutadores': '🤼', 'pólo aquático': '🤽',  'handebol': '🤾', 'máscara de mergulho': '🤿', 'flor murcha': '🥀', 'tambor com baquetas': '🥁', 'copos tilintando': '🥂', 'copo de vidro': '🥃', 'colher': '🥄', 'rede de gols': '🥅', 'medalha segundo lugar': '🥈', 'medalha terceiro lugar': '🥉', 'luva de boxe': '🥊', 'artes marciais': '🥋', 'pedra de ondulação': '🥌', 'lacrosse': '🥍', 'softbol': '🥎', 'croissant': '🥐', 'abacate': '🥑', 'pepino': '🥒', 'bacon': '🥓', 'batata': '🥔', 'cenoura': '🥕', 'pão baguete': '🥖', 'salada verde': '🥗', 'panela rasa de comida': '🥘', 'pão recheado': '🥙', 'ovo': '🥚', 'copo de leite': '🥛', 'amendoim': '🥜', 'kiwis': '🥝', 'panquecas': '🥞', 'bolinho de massa': '🥟', 'biscoito da sorte': '🥠', 'caixa para viagem': '🥡', 'pauzinhos': '🥢', 'tigela com colher': '🥣', 'copo com canudo': '🥤', 'coco': '🥥', 'brócolis': '🥦', 'torta': '🥧', 'pretzel': '🥨', 'corte de carne': '🥩', 'sanduíche': '🥪', 'alimentos enlatados': '🥫', 'folhas verdes': '🥬', 'manga': '🥭', 'bolo da lua': '🥮', 'bagel': '🥯', 'rosto 3 corações': '🥰', 'cara bocejando': '🥱', 'cara de festa': '🥳', 'cara tonta': '🥴', 'cara quente': '🥵', 'cara fria': '🥶', 'ninja': '🥷', 'cara suplicante': '🥺', 'sári': '🥻', 'jaleco': '🥼', 'bota de caminhada': '🥾', 'sapato baixo feminino': '🥿', 'caranguejo bug': '🦀', 'cara de leão': '🦁', 'escorpião': '♏', 'peru': '🦃', 'unicórnio': '🦄', 'águia': '🦅', 'pato': '🦆', 'morcego': '🦇', 'tubarão': '🦈', 'coruja': '🦉', 'cara de raposa': '🦊', 'borboleta': '🦋', 'veado': '🦌', 'gorila': '🦍', 'lagarto': '🦎', 'rinoceronte': '🦏', 'camarão': '🦐', 'Lula': '🦑', 'cara de girafa': '🦒', 'zebra': '🦓', 'ouriço': '🦔', 'saurópode': '🦕', 'rex': '🦖', 'críquete ': '🦗', 'canguru': '🦘', 'lhama': '🦙', 'pavão': '🦚', 'hipopótamo': '🦛', 'papagaio': '🦜', 'guaxinim': '🦝', 'lagosta': '🦞', 'mosquito': '🦟', 'micróbio': '🦠', 'texugo': '🦡', 'cisne': '🦢', 'preguiça': '🦥', 'lontra': '🦦', 'orangotango': '🦧', 'gambá': '🦨', 'Flamengo': '🦩', 'ostra': '🦪', 'cão guia': '🦮', 'sondando cana': '🦯', 'osso': '🦴', 'perna': '🦵', 'pé': '🦶', 'dente': '🦷', 'super herói': '🦸',  'supervilão': '🦹', 'colete de segurança': '🦺', 'aparelho auditivo': '🦻', 'cadeira de rodas': '🦼', 'cadeira de rodas manual': '🦽', 'braço mecânico': '🦾', 'perna mecânica': '🦿', 'fatia de queijo': '🧀', 'bolinho': '🧁', 'sal': '🧂', 'caixa de bebidas': '🧃', 'alho': '🧄', 'cebola': '🧅', 'falafel': '🧆', 'waffle': '🧇', 'manteiga': '🧈', 'cubo de gelo': '🧊',  'pessoa em pé': '🧍',  'pessoa ajoelhada': '🧎',  'pessoa surda': '🧏', 'rosto com monóculo': '🧐', 'agricultor ': '🧑‍🌾', 'cozinhar': '🧑‍🍳', 'pessoa alimentando bebê': '🧑‍🍼', 'mx cláusula': '🧑‍🎄', 'aluno': '🧑‍🎓', 'cantor': '🧑‍🎤', 'artista': '🧑‍🎨', 'professor': '🧑‍🏫', 'operário de fábrica': '🧑‍🏭', 'tecnólogo': '🧑‍💻', 'trabalhador de escritório': '🧑‍💼', 'mecânico': '🧑‍🔧', 'cientista ': '🧑‍🔬', 'astronauta ': '🧑‍🚀', 'bombeiro': '🧑‍🚒', 'pessoas de mãos dadas': '🧑‍🤝‍🧑', 'pessoa com bengala': '🧑‍🦯', 'pessoa de cabelos cacheados': '🧑‍🦱', 'pessoa careca': '🧑‍🦲', 'pessoa de cabelos brancos': '🧑‍🦳', 'pessoa em cadeira de rodas motorizada': '🧑‍🦼', 'pessoa em cadeira de rodas manual': '🧑‍🦽', 'profissional de saúde': '🧑‍⚕️', 'juiz ': '🧑‍⚖️', 'piloto': '🧑‍✈️', 'adulto': '🧑', 'criança': '🧒', 'idoso ': '🧓', 'mulher com barba': '🧔‍♀️', 'homem com barba': '🧔‍♂️', 'pessoa barbuda': '🧔', 'pessoa com lenço na cabeça': '🧕', 'mulher na sala úmida': '🧖‍♀️', 'homem na sala úmida': '🧖‍♂️',  'mulher escalando': '🧗‍♀️', 'pessoa escalando': '🧗‍♀️', 'homem escalando': '🧗‍♂️', 'mulher em posição de lótus': '🧘‍♀️', 'pessoa em posição de lótus': '🧘‍♀️', 'homem em posição de lótus': '🧘‍♂️', 'maga feminina': '🧙‍♀️', 'mago': '🧙‍♀️', 'mago masculino': '🧙‍♂️', 'fada feminina': '🧚‍♀️', 'fada': '🧚‍♀️', 'fada masculina': '🧚‍♂️', 'vampira feminina': '🧛‍♀️', 'vampiro': '🧛‍♀️', 'vampiro masculino': '🧛‍♂️', 'sereia': '🧜‍♀️', 'tritão': '🧜‍♂️', 'sereiano': '🧜‍♂️', 'elfa': '🧝‍♀️', 'elfo masculino': '🧝‍♂️', 'elfo': '🧝‍♂️', 'gênio feminino': '🧞‍♀️', 'gênio masculino': '🧞‍♂️', 'gênio': '🧞‍♂️', 'zumbi feminina': '🧟‍♀️', 'zumbi masculino': '🧟‍♂️', 'zumbi': '🧟‍♂️', 'cérebro': '🧠', 'coração laranja': '🧡', 'limite faturado': '🧢', 'luvas': '🧤', 'casaco': '🧥', 'meias': '🧦', 'envelope vermelho': '🧧', 'quebra cabeça': '🧩', 'tubo de ensaio': '🧪', 'placa de Petri': '🧫', 'ADN': '🧬', 'bússola': '🧭', 'ábaco': '🧮', 'extintor de incêndio': '🧯', 'caixa de ferramentas': '🧰', 'tijolos': '🧱', 'ímã': '🧲', 'bagagem ': '🧳', 'frasco de loção': '🧴', 'tópico': '🧵', 'fio': '🧶', 'alfinete de segurança': '🧷', 'ursinho de pelúcia': '🧸', 'vassoura': '🧹', 'cesta': '🧺', 'rolo de papel': '🧻', 'sabão': '🧼', 'esponja': '🧽', 'recibo': '🧾', 'amuleto de nazar': '🧿', 'sapatilhas de balé': '🩰', 'Maiô de uma peça': '🩱', 'cuecas': '🩲', 'calções': '🩳', 'sandália tanga': '🩴', 'gota de sangue': '🩸', 'bandagem adesiva': '🩹', 'estetoscópio': '🩺', 'ei ei': '🪀', 'pipa': '🪁', 'pára quedas': '🪂', 'planeta anelado': '🪐', 'cadeira': '🪑', 'navalha': '🪒', 'machado': '🪓', 'lâmpada diya': '🪔', 'banjo': '🪕', 'bangbang': '‼️', 'interrobang': '⁉️', 'TM': '™️', 'informação': 'ℹ️', 'seta esquerda direita': '↔️', 'seta para cima e para baixo': '↕️', 'seta superior esquerda': '↖️', 'seta superior direita': '↗️', 'seta inferior direita': '↘️', 'seta inferior esquerda': '↙️', 'seta para a esquerda com gancho': '↩️', 'seta gancho de direita': '↪️', 'assistir': '⌚', 'ampulheta': '⌛', 'MyKeyb: teclado EntradaDados': '⌨️', 'ejetar': '⏏️', 'avanço rápido': '⏩', 'retroceder': '⏪', 'seta dupla para cima': '⏫', 'seta dupla para baixo': '⏬', 'triângulo duplo ': '⏮️', 'triângulo direita': '⏯️', 'despertador': '⏰', 'cronômetro': '⏱️',  'relógio temporizador': '⏲️', 'areia fluindo em ampulheta': '⏳', 'barra vertical dupla': '⏸️', 'quadrado para parada': '⏹️', 'círculo para registro': '⏺️', 'meu': 'Ⓜ️', 'pequeno quadrado ': '▪️', 'pequeno quadrado': '▫️', 'INICIAR': '▶️', 'seta para trás': '◀️', 'quadrado médio': '◻️', 'quadrado médio ': '◼️', 'quadrado pequeno': '◽', 'quadrado pequeno ': '◾', 'ensolarado': '☀️', 'nuvem': '☁️', '️guarda-chuva': '☂', 'boneco de neve': '☃', 'cometa': '☄️', 'telefone ': '☎️', 'sinal cheque': '☑️', 'trevo': '☘️', 'apontar para cima': '☝️', 'caveira': '☠️', 'sinal radioativo': '☢️', 'sinal de risco biológico': '☣️', 'cruz ortodoxa': '☦️', 'estrela e crescente': '☪️', 'símbolo da paz': '☮️', 'yin yang': '☯️', 'roda do dharma': '☸️', 'rosto carrancudo': '☹️', 'relaxado': '☺️', 'signo feminino': '♀️', 'signo masculino': '♂️', 'gêmeos': '♊', 'câncer': '♋', 'leão': '♌', 'virgem': '♍', 'peão de xadrez': '♟️', 'espadas': '♠️', 'clubes': '♣️', 'corações': '♥️', 'diamantes': '♦️', 'fontes termais': '♨️', 'reciclar': '♻️', 'infinito': '♾️', 'cadeira de rodas ': '♿', 'espadas cruzadas': '⚔️', 'símbolo médico': '⚕️', 'Cajado de Esculápio': '⚕️', 'escalas': '⚖️', 'alambique': '⚗️', 'engrenagem': '⚙️', 'símbolo do átomo': '⚛️', 'flor de lis': '⚜️', 'aviso': '⚠️', 'Zap': '⚡', 'símbolo transgênero': '⚧️', 'círculo branco': '⚪', 'círculo preto': '⚫', 'caixão': '⚰️', 'urna funerária': '⚱️', 'beisebol': '⚾', 'boneco sem neve': '⛄', 'parcialmente ensolarado': '⛅', 'nuvem de trovão e chuva': '⛈️', 'ofiúco': '⛎', 'escolha': '⛏️', 'capacete com cruz branca': '⛑️', 'correntes': '⛓️', 'nenhuma entrada': '⛔', 'santuário xintoísta': '⛩️', 'igreja': '⛪', 'montanha': '⛰️', 'guarda chuva no chão': '⛱️', 'fonte': '⛲', 'golfe ': '⛳', 'balsa': '⛴️', 'barco': '⛵', 'veleiro': '⛵', 'esquiador': '⛷️', 'patim no gelo': '⛸️', 'mulher quicando bola': '⛹️‍♀️', 'homem quicando bola': '⛹️‍♂️', 'pessoa com bola': '⛹️‍♂️', 'barraca': '⛺', 'bomba de combustível': '⛽', 'tesoura': '✂️', 'avião': '✈️', 'envelope': '✉️', 'punho': '✊', 'mão': '✋',  'v': '✌️', 'mão escrevendo': '✍️', 'lápis  ': '✏️', 'ponta preta': '✒️', 'marca de seleção pesada': '✔️', 'multiplicação  x': '✖️', 'cruz latina': '✝️', 'estrela de David': '✡️', 'asterisco de oito raios': '✳️', 'estrela negra de oito pontas': '✴️', 'floco de neve': '❄️', 'brilho': '❇️', 'x': '❌', 'ponto de exclamação de coração': '❣️', 'coração em chamas': '❤️‍🔥', 'remendando o coração': '❤️‍🩹', 'coração': '❤️', 'seta para a direita': '➡️', 'laço encaracolado': '➰', 'ciclo': '➿', 'seta apontando para cima': '⤴️', 'seta para baixo': '⬇️', 'seta para a esquerda': '⬅️', 'seta para cima': '⬆️', 'quadrado grande preto': '⬛', 'quadrado grande branco': '⬜', 'estrelinha': '⭐', 'ó': '⭕', 'traço ondulado': '〰️', 'alternância de parte': '〽️', 'parabéns': '㊗️', 'segredo': '㊙️', 'indicador a': '�', 'indicador b': '�', 'indicador c': '�', 'indicador d': '�', 'indicador e': '🇪', 'indicador regional f': '�', 'indicador g': '�', 'indicador h': '�', 'indicador i': '�', 'indicador j': '�', 'indicador k': '�', 'indicador l': '�', 'indicador m': '�', 'indicador n': '🇳', 'indicador o': '�', 'indicador p': '🇵', 'indicador q': '�', 'indicador r': '�', 'indicadores regionais': '�', 'indicador t': '�', 'indicador u': '�', 'indicador v': '�', 'indicador w': '�', 'indicador x': '�', 'indicador y': '�', 'indicador z': '�','USUÁRIOS': '👥',
+'PAGAR': '💸',
+'Meios de Pagto': '💵',
+'VALOR A PAGAR': '💰',
+'PAGAR COM PIX': '📲💸',
+'LOJAS': '🏪',
+'CATÁLOGO': '📖', 
+'PRODUTOS': '🛒',
+'VEÍCULOS': '🚗',
+'ABASTECIMENTOS': '⛽',
+'Combustíveis': '⛽',
+'Bicos-bombas': '🚰⛽',
+'Trocar Pin': '🔁📌',
+'BANCOS': '🏦', 
+'TOKEN CARTÃO': '🎫', 
+'CARTÃO': '💳',
+'SALDO': '💹', 
+'FOLLOW UP': '📆',
+'CONFIGURAR': '⚙', 
+'Mostrar QR code': '📤',
+'Ler QR code': '📸',
+'Concluir Pedido': '️',
+'Captura Token': '📸🎫',
+'Menu': '☰',
+'Abertura': '🌟',
+'Captar' : '📸',
+ 'imagem': '🖼️',
+
+'Comunicação': '🗣📞💬' ,
+'Calendário': '📅 📆',
+'Clima': '⏰ ⏳',
+'Lembretes': '📌 📍 🖊️',
+'Notificações': '🔔 📢 📣' ,
+'Preferências': '⚙' ,
+'Fotos': '📸 📷 🖼️' ,
+'Música': '🎵 🎶' ,
+'Vídeos': '🎥 📽️ 🎞️',
+'Localização': '📍 🌍 🗺️',
+'Pagamentos': '💵 💳 💰' ,
+'Saúde': '💉 🌡️ 💊 🚑' ,
+'Fitness': '🏋️‍🤸 🚴 🧘',
+'Alimentação': '🍔 🍎 🥦 🥤',
+'Tempo': '⏰ ⏳' ,
+'Social':  '🤝' ,
+'Jogos': '🎮 🕹️ 🎲 🎯', };
+
+
+    filteredEmojis = {...emojis}; // copia inicial
+  }
+
+  _filterEmojis() {
+    String query = _controller.text;
+    if (query.isEmpty) {
+      setState(() {
+        filteredEmojis = {...emojis};
+      });
+      return;
+    }
+
+    final Map<String, String> temp = {};
+    emojis.forEach((key, value) {
+      if (key.toLowerCase().contains(query.toLowerCase())) {
+        temp[key] = value;
+      }
+    });
+    setState(() {
+      filteredEmojis = temp;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('WhatEmoji'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: TextField(
-                controller: _contextController,
-                maxLines: null,
-                decoration: InputDecoration(labelText: "Digite o contexto"),
-                onChanged: (text) {
-                  // Chamar a função para exibir emojis filtrados
-                  _showEmojiDialog(text);
-                },
+      appBar: AppBar(title: const Text('List of Emojis')),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _controller,
+              onChanged: (text) => _filterEmojis(),
+              decoration: const InputDecoration(
+                labelText: 'Pesquisa',
+                border: OutlineInputBorder(),
               ),
-            ),
-            SizedBox(height: 20),
-            Expanded(
-              child: TextField(
-                controller: _emojiController,
-                maxLines: null,
-                decoration: InputDecoration(labelText: "Emojis selecionados"),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  _showEmojiDialog(String text) {
-    // Aqui você pode adicionar a lógica para filtrar emojis com base no texto
-    // Por enquanto, apenas mostraremos todos os emojis da listEmoji
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Selecionar Emoji'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: listEmoji.map((emoji) {
-                return GestureDetector(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(emoji, style: TextStyle(fontSize: 24)),
-                  ),
-                  onTap: () {
-                    _emojiController.text += emoji;
-                    Navigator.of(context).pop();
-                  },
-                );
-              }).toList(),
             ),
           ),
-        );
-      },
+          Expanded(
+            child: ListView.builder(
+              itemCount: filteredEmojis.length,
+              itemBuilder: (context, index) {
+                var entry = filteredEmojis.entries.elementAt(index);
+                if(index < 1)return ListTile(
+                  title: Text(entry.key),
+                  trailing: Text(
+                    entry.value,
+                    style: const TextStyle(fontSize: 33),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
